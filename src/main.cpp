@@ -1,4 +1,6 @@
+#include <sstream>
 #include <vector>
+#include <algorithm>
 
 #include "raylib.h"
 
@@ -23,24 +25,69 @@ struct Cell
     Color color = gray;
 };
 
-void reveal(std::vector<std::vector<Cell>> &grid, int x, int y)
+std::vector<Vector2> adjacents(std::vector<std::vector<Cell>> &grid, int x, int y, int rows, int columns)
 {
+    std::vector<Vector2> adjc;
+    for (int i{-1}; i <= 1; i++)
+    {
+        for (int j{-1}; j <= 1; j++) {
+            int ax = x + i;
+            int ay = y + j;
+            if (ax >= 0 && ay >= 0 && ax < columns && ay < rows && (ax != x || ax != y))
+                adjc.push_back(Vector2{(float)ax, (float)ay});
+        }
+    }
+    return adjc;
+}
 
+int countMines(std::vector<std::vector<Cell>> &grid, std::vector<Vector2>& adjc)
+{
+    int mc = 0;
+    for (Vector2& adPos : adjc)
+    {
+        if (grid[(int)adPos.x][(int)adPos.y].value == -1)
+            mc++;
+    }
+    return mc;
+}
+
+void reveal(std::vector<std::vector<Cell>> &grid, int x, int y, int rows, int columns)
+{
+    if (!grid[x][y].revealed)
+    {
+        std::vector<Vector2> adjc = adjacents(grid, x, y, rows, columns);
+        grid[x][y].value = countMines(grid, adjc);
+        grid[x][y].revealed = true;
+
+        if (grid[x][y].value == 0)
+        {
+            for (Vector2& adPos : adjc)
+            {
+                if (grid[adPos.x][adPos.y].value == 0 && !grid[adPos.x][adPos.y].revealed)
+                    reveal(grid, adPos.x, adPos.y, rows, columns);
+            }
+        }
+    }
 }
 
 void initGame(std::vector<std::vector<Cell>> &grid, int x, int y, int mineCount, int rows, int columns)
 {
+    std::vector<int> minePosX = {x};
+    std::vector<int> minePosY = {y};
     for (int i{0}; i < mineCount;)
     {
         int mineX = GetRandomValue(0, columns - 1);
         int mineY = GetRandomValue(0, rows - 1);
 
-        if (mineX != x || mineY != y)
+        if (std::find(minePosX.begin(), minePosX.end(), mineX) == minePosX.end() || std::find(minePosY.begin(), minePosY.end(), mineY) == minePosY.end())
         {
             i++;
             grid[mineX][mineY].value = -1; // -1 means this cell is a mine
+            minePosX.push_back(mineX);
+            minePosY.push_back(mineY);
         }
     }
+    reveal(grid, x, y, rows, columns);
 }
 
 int main()
@@ -55,7 +102,8 @@ int main()
     const int cellSize = (screenWidth - pad * (columns + 1)) / columns;
     const int mineCount = 10;
 
-    const Color colArr[8] = {green, yellow, orange, red, teal, aqua, lblue, blue};
+    const std::vector<Color> colArr = {Color{96, 106, 126, 255}, green, yellow, orange, red, teal, aqua, lblue, blue};
+    char const* numbers[] = {"1", "2", "3", "4", "5", "6", "7", "8"}; 
 
     bool started = false;
 
@@ -94,13 +142,21 @@ int main()
                         {
                             initGame(grid, x, y, mineCount, rows, columns);
                             started = true;
-                        } else reveal(grid, x, y);
+                        } else reveal(grid, x, y, rows, columns);
                     }
                 }
+                if (cell.revealed && cell.value >= 0)
+                    cellCol = colArr[cell.value];
 
                 DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
                 if (cell.value == -1)
                     DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
+                else if (cell.value > 0)
+                {
+                    const char* text = numbers[cell.value-1];
+                    float size = cellSize / 2.0;
+                    DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4, size, bgCol);
+                }
             }
         }
         EndDrawing();
