@@ -2,7 +2,33 @@
 
 #include "raylib.h"
 
-void initGame(std::vector<std::vector<int>> &grid, int x, int y, int mineCount, int rows, int columns)
+// from https://nordtheme.com
+const Color bgCol  = Color{46, 52, 64, 255};
+const Color red    = Color{191, 97, 106, 255};
+const Color hlt    = Color{76, 86, 106, 255};
+const Color teal   = Color{143, 188, 187, 255};
+const Color aqua   = Color{136, 192, 208, 255};
+const Color blue   = Color{94, 129, 172, 255};
+const Color gray   = Color{67, 76, 94, 255};
+const Color lblue  = Color{129, 161, 193, 255};
+const Color green  = Color{163, 190, 140, 255};
+const Color yellow = Color{235, 203, 139, 255};
+const Color orange = Color{208, 135, 112, 255};
+
+
+struct Cell
+{
+    bool revealed = false;
+    int value = 0;
+    Color color = gray;
+};
+
+void reveal(std::vector<std::vector<Cell>> &grid, int x, int y)
+{
+
+}
+
+void initGame(std::vector<std::vector<Cell>> &grid, int x, int y, int mineCount, int rows, int columns)
 {
     for (int i{0}; i < mineCount;)
     {
@@ -12,7 +38,7 @@ void initGame(std::vector<std::vector<int>> &grid, int x, int y, int mineCount, 
         if (mineX != x || mineY != y)
         {
             i++;
-            grid[mineX][mineY] = -1; // -1 means this cell is a mine
+            grid[mineX][mineY].value = -1; // -1 means this cell is a mine
         }
     }
 }
@@ -29,19 +55,21 @@ int main()
     const int cellSize = (screenWidth - pad * (columns + 1)) / columns;
     const int mineCount = 10;
 
+    const Color colArr[8] = {green, yellow, orange, red, teal, aqua, lblue, blue};
+
     bool started = false;
 
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Minesweeper");
 
-    std::vector<std::vector<int>> grid(columns);
-    for (int j{0}; j < rows; j++)
-        grid[j] = std::vector<int>(rows);
+    std::vector<std::vector<Cell>> grid(columns);
+    for (int j{0}; j < columns; j++)
+        grid[j] = std::vector<Cell>(rows);
 
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        ClearBackground(GRAY);
+        ClearBackground(bgCol);
 
         int mouseHoverX = GetMouseX();
         int mouseHoverY = GetMouseY();
@@ -50,25 +78,29 @@ int main()
         {
             for (int y{0}; y < rows; y++)
             {
-                Rectangle cell = Rectangle{(float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
+                Rectangle cellPos = Rectangle{(float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
                                            (float)cellSize, (float)cellSize};
-                Color col = LIGHTGRAY;
+                Cell cell = grid[x][y];
+                Color cellCol = cell.color;
 
                 // checking if cursor is hovering on a cell
-                if (cell.x <= mouseHoverX && cell.y <= mouseHoverY && mouseHoverX <= cell.x + cell.width &&
-                    mouseHoverY <= cell.y + cell.height)
+                if (cellPos.x <= mouseHoverX && cellPos.y <= mouseHoverY && mouseHoverX <= cellPos.x + cellPos.width &&
+                    mouseHoverY <= cellPos.y + cellPos.height && !cell.revealed)
                 {
-                    col = RAYWHITE;
-                    if (!started && IsMouseButtonPressed(0))
+                    cellCol = hlt;
+                    if (IsMouseButtonPressed(0))
                     {
-                        initGame(grid, x, y, mineCount, rows, columns);
-                        started = true;
+                        if (!started)
+                        {
+                            initGame(grid, x, y, mineCount, rows, columns);
+                            started = true;
+                        } else reveal(grid, x, y);
                     }
                 }
 
-                DrawRectangleRounded(cell, 0.1, 0, col);
-                if (grid[x][y] == -1)
-                    DrawCircle(cell.x + cellSize / 2, cell.y + cellSize / 2, cellSize / 4, BLACK);
+                DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
+                if (cell.value == -1)
+                    DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
             }
         }
         EndDrawing();
