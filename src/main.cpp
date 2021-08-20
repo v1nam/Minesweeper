@@ -33,7 +33,7 @@ std::vector<Vector2> adjacents(std::vector<std::vector<Cell>> &grid, int x, int 
         for (int j{-1}; j <= 1; j++) {
             int ax = x + i;
             int ay = y + j;
-            if (ax >= 0 && ay >= 0 && ax < columns && ay < rows && (ax != x || ax != y))
+            if (ax >= 0 && ay >= 0 && ax < columns && ay < rows && (ax != x || ay != y))
                 adjc.push_back(Vector2{(float)ax, (float)ay});
         }
     }
@@ -53,7 +53,7 @@ int countMines(std::vector<std::vector<Cell>> &grid, std::vector<Vector2>& adjc)
 
 void reveal(std::vector<std::vector<Cell>> &grid, int x, int y, int rows, int columns)
 {
-    if (!grid[x][y].revealed)
+    if (!grid[x][y].revealed && grid[x][y].value != -1)
     {
         std::vector<Vector2> adjc = adjacents(grid, x, y, rows, columns);
         grid[x][y].value = countMines(grid, adjc);
@@ -62,10 +62,7 @@ void reveal(std::vector<std::vector<Cell>> &grid, int x, int y, int rows, int co
         if (grid[x][y].value == 0)
         {
             for (Vector2& adPos : adjc)
-            {
-                if (grid[adPos.x][adPos.y].value == 0 && !grid[adPos.x][adPos.y].revealed)
-                    reveal(grid, adPos.x, adPos.y, rows, columns);
-            }
+                reveal(grid, adPos.x, adPos.y, rows, columns);
         }
     }
 }
