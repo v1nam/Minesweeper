@@ -13,6 +13,8 @@ enum class State {
 
 class Display {
 public:
+    int screenWidth;
+    int screenHeight;
     int pad;
     int cellSize;
 

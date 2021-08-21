@@ -63,6 +63,8 @@ void Display::draw()
                 }
             }
         }
+        if (IsKeyPressed(KEY_SPACE))
+            state = State::Paused;
         break;
     }
     case State::StartMenu: {
@@ -80,6 +82,8 @@ void Display::draw()
             btcol1 = gray;
             if (IsMouseButtonPressed(0)) {
                 SetWindowSize(436, 436);
+                screenWidth = 436;
+                screenHeight = 436;
                 mnsp = Minesweeper(8, 8, 10);
                 cellSize = (436 - pad * (mnsp.columns + 1)) / mnsp.columns;
                 state = State::Playing;
@@ -89,6 +93,8 @@ void Display::draw()
             btcol2 = gray;
             if (IsMouseButtonPressed(0)) {
                 SetWindowSize(548, 548);
+                screenWidth = 548;
+                screenHeight = 548;
                 mnsp = Minesweeper(16, 16, 40);
                 cellSize = (548 - pad * (mnsp.columns + 1)) / mnsp.columns;
                 state = State::Playing;
@@ -130,6 +136,10 @@ void Display::draw()
         break;
     case State::Paused:
         ClearBackground(bgCol);
+        const char* pauseText = "PAUSED";
+        DrawText(pauseText, (screenWidth / 2 - MeasureText(pauseText, 50) / 2), screenHeight / 3, 50, hlt);
+        if (IsKeyPressed(KEY_SPACE))
+            state = State::Playing;
         break;
     }
 }
