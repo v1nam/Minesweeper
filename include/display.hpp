@@ -13,8 +13,6 @@ enum class State {
 
 class Display {
 public:
-    int screenWidth;
-    int screenHeight;
     int pad;
     int cellSize;
 
@@ -28,6 +26,6 @@ public:
 
     Minesweeper mnsp;
 
-    Display(int cellSize, int pad, Minesweeper mnsp, int screenWidth, int screenHeight);
+    Display(int pad, int screenWidth, int screenHeight);
     void draw();
 };
