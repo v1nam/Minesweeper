@@ -65,6 +65,13 @@ void Display::draw()
         }
         if (IsKeyPressed(KEY_SPACE))
             state = State::Paused;
+        else if (IsKeyPressed(KEY_Q)) {
+            state = State::StartMenu;
+            SetWindowSize(548, 436);
+            screenWidth = 548;
+            screenHeight = 436;
+            mnsp.clear();
+        }
         break;
     }
     case State::StartMenu: {
