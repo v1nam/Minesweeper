@@ -47,6 +47,7 @@ void Minesweeper::reveal(int x, int y)
         std::vector<Vector2> adjc = adjacents(x, y);
         grid[x][y].value = countMines(adjc);
         grid[x][y].revealed = true;
+        revealedCells++;
 
         if (grid[x][y].value == 0)
         {
@@ -74,4 +75,5 @@ void Minesweeper::initGame(int x, int y)
         }
     }
     this->reveal(x, y);
+    started = true;
 }
