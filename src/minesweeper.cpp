@@ -1,9 +1,9 @@
-#include <vector>
 #include <algorithm>
 #include <random>
+#include <vector>
 
-#include "raylib.h"
 #include "minesweeper.hpp"
+#include "raylib.h"
 
 Minesweeper::Minesweeper(int rows, int columns, int mineCount)
 {
@@ -11,20 +11,19 @@ Minesweeper::Minesweeper(int rows, int columns, int mineCount)
     this->columns = columns;
     this->mineCount = mineCount;
 
-    for (int _j{0}; _j < this->columns; _j++)
+    for (int _j { 0 }; _j < this->columns; _j++)
         grid.push_back(std::vector<Cell>(this->rows));
 }
 
 std::vector<Vector2> Minesweeper::adjacents(int x, int y)
 {
     std::vector<Vector2> adjc;
-    for (int i{-1}; i <= 1; i++)
-    {
-        for (int j{-1}; j <= 1; j++) {
+    for (int i { -1 }; i <= 1; i++) {
+        for (int j { -1 }; j <= 1; j++) {
             int ax = x + i;
             int ay = y + j;
             if (ax >= 0 && ay >= 0 && ax < columns && ay < rows && (ax != x || ay != y))
-                adjc.push_back(Vector2{(float)ax, (float)ay});
+                adjc.push_back(Vector2 { (float)ax, (float)ay });
         }
     }
     return adjc;
@@ -33,8 +32,7 @@ std::vector<Vector2> Minesweeper::adjacents(int x, int y)
 int Minesweeper::countMines(std::vector<Vector2>& adjc)
 {
     int mc = 0;
-    for (Vector2& adPos : adjc)
-    {
+    for (Vector2& adPos : adjc) {
         if (grid[(int)adPos.x][(int)adPos.y].value == -1)
             mc++;
     }
@@ -43,15 +41,13 @@ int Minesweeper::countMines(std::vector<Vector2>& adjc)
 
 void Minesweeper::reveal(int x, int y)
 {
-    if (!grid[x][y].revealed && grid[x][y].value != -1)
-    {
+    if (!grid[x][y].revealed && grid[x][y].value != -1) {
         std::vector<Vector2> adjc = adjacents(x, y);
         grid[x][y].value = countMines(adjc);
         grid[x][y].revealed = true;
         revealedCells++;
 
-        if (grid[x][y].value == 0)
-        {
+        if (grid[x][y].value == 0) {
             for (Vector2& adPos : adjc)
                 this->reveal(adPos.x, adPos.y);
         }
@@ -63,8 +59,7 @@ void Minesweeper::initGame(int x, int y, std::mt19937 gen)
     std::uniform_int_distribution<> rngX(0, columns - 1);
     std::uniform_int_distribution<> rngY(0, rows - 1);
 
-    for (int i{0}; i < mineCount; i++)
-    {
+    for (int i { 0 }; i < mineCount; i++) {
         int mineX = rngX(gen);
         int mineY = rngY(gen);
 
