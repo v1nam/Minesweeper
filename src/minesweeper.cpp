@@ -1,5 +1,6 @@
 #include <vector>
 #include <algorithm>
+#include <random>
 
 #include "raylib.h"
 #include "minesweeper.hpp"
@@ -57,22 +58,20 @@ void Minesweeper::reveal(int x, int y)
     }
 }
 
-void Minesweeper::initGame(int x, int y)
+void Minesweeper::initGame(int x, int y, std::mt19937 gen)
 {
-    std::vector<int> minePosX = {x};
-    std::vector<int> minePosY = {y};
-    for (int i{0}; i < mineCount;)
-    {
-        int mineX = GetRandomValue(0, columns - 1);
-        int mineY = GetRandomValue(0, rows - 1);
+    std::uniform_int_distribution<> rngX(0, columns - 1);
+    std::uniform_int_distribution<> rngY(0, rows - 1);
 
-        if (std::find(minePosX.begin(), minePosX.end(), mineX) == minePosX.end() || std::find(minePosY.begin(), minePosY.end(), mineY) == minePosY.end())
-        {
-            i++;
+    for (int i{0}; i < mineCount; i++)
+    {
+        int mineX = rngX(gen);
+        int mineY = rngY(gen);
+
+        if (grid[mineX][mineY].value != -1 && (mineX != x || mineY != y))
             grid[mineX][mineY].value = -1; // -1 means this cell is a mine
-            minePosX.push_back(mineX);
-            minePosY.push_back(mineY);
-        }
+        else
+            i--;
     }
     this->reveal(x, y);
     started = true;
