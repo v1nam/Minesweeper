@@ -71,3 +71,14 @@ void Minesweeper::initGame(int x, int y, std::mt19937 gen)
     this->reveal(x, y);
     started = true;
 }
+
+void Minesweeper::clear()
+{
+    rows = 0;
+    columns = 0;
+    mineCount = 0;
+    revealedCells = 0;
+    started = false;
+
+    grid.clear();
+}
