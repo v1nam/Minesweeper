@@ -14,8 +14,8 @@ Display::Display(int cellSize,
     this->mnsp = mnsp;
     this->cellSize = cellSize;
 
-    menuBtn1 = Rectangle { 80.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
-    menuBtn2 = Rectangle { 300.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
+    menuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
+    menuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
 }
 
 void Display::draw()
