@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <vector>
 
 #include "raylib.h"
@@ -19,6 +18,8 @@ class Minesweeper
         int rows;
         int columns;
         int mineCount;
+        int revealedCells = 0;
+        bool started = false;
         std::vector<std::vector<Cell>> grid;
 
         Minesweeper(int rows=8, int columns=8, int mineCount=10);
