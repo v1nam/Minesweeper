@@ -1,4 +1,3 @@
-#include <cmath>
 #include <vector>
 
 #include "colors.hpp"
@@ -11,8 +10,7 @@ int main()
     const int screenWidth = 548;
     const int screenHeight = 436;
 
-    Minesweeper mnsp = Minesweeper(8, 8, 10);
-    Display display = Display(std::min((screenWidth - 4 * (mnsp.columns + 1)) / mnsp.columns, 50), 4, mnsp, screenWidth, screenHeight);
+    Display display = Display(4, screenWidth, screenHeight);
     display.state = State::StartMenu;
 
     SetConfigFlags(FLAG_VSYNC_HINT);
