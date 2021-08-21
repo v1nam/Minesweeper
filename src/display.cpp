@@ -4,15 +4,9 @@
 #include "display.hpp"
 #include "raylib.h"
 
-Display::Display(int cellSize,
-    int pad,
-    Minesweeper mnsp,
-    int screenWidth,
-    int screenHeight)
+Display::Display(int pad, int screenWidth, int screenHeight)
 {
     this->pad = pad;
-    this->mnsp = mnsp;
-    this->cellSize = cellSize;
 
     menuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     menuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
@@ -82,10 +76,24 @@ void Display::draw()
         Color btcol1 = black;
         Color btcol2 = black;
 
-        if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn1))
+        if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn1)) {
             btcol1 = gray;
-        if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn2))
+            if (IsMouseButtonPressed(0)) {
+                SetWindowSize(436, 436);
+                mnsp = Minesweeper(8, 8, 10);
+                cellSize = (436 - pad * (mnsp.columns + 1)) / mnsp.columns;
+                state = State::Playing;
+            }
+        }
+        if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn2)) {
             btcol2 = gray;
+            if (IsMouseButtonPressed(0)) {
+                SetWindowSize(548, 548);
+                mnsp = Minesweeper(16, 16, 40);
+                cellSize = (548 - pad * (mnsp.columns + 1)) / mnsp.columns;
+                state = State::Playing;
+            }
+        }
 
         DrawRectangleRounded(menuBtn1, 0.3, 0, btcol1);
         DrawRectangleRounded(menuBtn2, 0.3, 0, btcol2);
