@@ -1,3 +1,5 @@
+#include <random>
+
 #include "raylib.h"
 #include "display.hpp"
 #include "colors.hpp"
@@ -11,6 +13,9 @@ Display::Display(int cellSize, int pad, Minesweeper mnsp)
 
 void Display::draw()
 {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
     switch (state)
     {
     case State::Playing:
@@ -37,7 +42,7 @@ void Display::draw()
                     if (IsMouseButtonPressed(0))
                     {
                         if (!mnsp.started)
-                            mnsp.initGame(x, y);
+                            mnsp.initGame(x, y, gen);
                         else
                             mnsp.reveal(x, y);
                     }
