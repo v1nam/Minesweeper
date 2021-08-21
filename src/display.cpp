@@ -11,13 +11,14 @@ Display::Display(int cellSize, int pad, Minesweeper mnsp)
 
 void Display::draw()
 {
-    int mouseHoverX = GetMouseX();
-    int mouseHoverY = GetMouseY();
-
     switch (state)
     {
-    case State::Playing:        
+    case State::Playing:
+    {
         ClearBackground(bgCol);
+    
+        int mouseHoverX = GetMouseX();
+        int mouseHoverY = GetMouseY();
 
         for (int x{0}; x < mnsp.columns; x++)
         {
@@ -56,6 +57,7 @@ void Display::draw()
             }
         }
         break;
+    }
     case State::GameOver:
         ClearBackground(bgCol);
         break;
