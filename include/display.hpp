@@ -29,7 +29,7 @@ public:
     State state = State::Playing;
 
     bool textureMade = false; // for storing whether game over texture is made
-    Texture2D gameOverTexture;
+    RenderTexture2D gameOverTexture; //= LoadRenderTexture(548, 548);
 
     Minesweeper mnsp;
 
