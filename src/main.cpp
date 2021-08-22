@@ -19,8 +19,17 @@ int main()
     while (!WindowShouldClose()) {
         BeginDrawing();
         display.draw();
+        if (IsKeyPressed(KEY_Q)) {
+            display.state = State::StartMenu;
+            display.screenWidth = 548;
+            display.screenHeight = 436;
+            SetWindowSize(548, 436);
+            display.mnsp.clear();
+            display.textureMade = false;
+        }
         EndDrawing();
     }
+    UnloadTexture(display.gameOverTexture);
     CloseWindow();
     return 0;
 }
