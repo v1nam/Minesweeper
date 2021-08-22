@@ -18,8 +18,12 @@ public:
     int columns;
     int mineCount;
     int revealedCells = 0;
+
     bool started = false;
+    bool won = false;
+
     std::vector<std::vector<Cell>> grid;
+    char* endText = "Lost";
 
     Minesweeper(int rows = 8, int columns = 8, int mineCount = 10);
     std::vector<Vector2> adjacents(int x, int y);
