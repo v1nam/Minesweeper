@@ -19,14 +19,8 @@ int main()
     while (!WindowShouldClose()) {
         BeginDrawing();
         display.draw();
-        if (IsKeyPressed(KEY_Q)) {
-            display.state = State::StartMenu;
-            display.screenWidth = 548;
-            display.screenHeight = 436;
-            SetWindowSize(548, 436);
-            display.mnsp.clear();
-            display.textureMade = false;
-        }
+        if (IsKeyPressed(KEY_Q))
+            display.reset();
         EndDrawing();
     }
     UnloadTexture(display.gameOverTexture.texture);
