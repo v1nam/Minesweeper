@@ -10,11 +10,11 @@ int main()
     const int screenWidth = 548;
     const int screenHeight = 436;
 
-    Display display = Display(4, screenWidth, screenHeight);
-    display.state = State::StartMenu;
-
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Minesweeper");
+
+    Display display = Display(4, screenWidth, screenHeight);
+    display.state = State::StartMenu;
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -29,7 +29,8 @@ int main()
         }
         EndDrawing();
     }
-    UnloadTexture(display.gameOverTexture);
+    UnloadTexture(display.gameOverTexture.texture);
+    UnloadRenderTexture(display.gameOverTexture);
     CloseWindow();
     return 0;
 }
