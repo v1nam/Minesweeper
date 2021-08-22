@@ -12,6 +12,7 @@ Display::Display(int pad, int screenWidth, int screenHeight)
 
     menuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     menuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
+    gameOverTexture = LoadRenderTexture(548, 548);
 }
 
 void Display::draw()
@@ -30,12 +31,13 @@ void Display::draw()
             mnsp.won = true;
             mnsp.endText = "Won!";
             state = State::GameOver;
+            break;
         }
         for (int x { 0 }; x < mnsp.columns; x++) {
             for (int y { 0 }; y < mnsp.rows; y++) {
                 Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
                     (float)cellSize, (float)cellSize };
-                Cell cell = mnsp.grid[x][y];
+                Cell& cell = mnsp.grid[x][y];
                 Color cellCol = cell.color;
 
                 // checking if cursor is hovering on a cell
@@ -46,8 +48,9 @@ void Display::draw()
                             mnsp.initGame(x, y, gen);
                         else if (cell.value == -1) {
                             mnsp.won = false;
+                            cell.revealed = true;
                             state = State::GameOver;
-                            DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, red);
+                            //DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, red);
                         } else
                             mnsp.reveal(x, y);
                     }
@@ -56,9 +59,12 @@ void Display::draw()
                     cellCol = colArr[cell.value];
 
                 DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
+                /*
                 if (cell.value == -1) {
                     DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
-                } else if (cell.value > 0) {
+                }
+                */
+                if (cell.value > 0) {
                     const char* text = numbers[cell.value - 1];
                     float size = cellSize / 2.0;
                     DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
@@ -126,13 +132,40 @@ void Display::draw()
     }
     case State::GameOver: {
         if (!textureMade) {
-            gameOverTexture = LoadTextureFromImage(GetScreenData());
+            BeginTextureMode(gameOverTexture);
+            {
+                ClearBackground(bgCol);
+                for (int x { 0 }; x < mnsp.columns; x++) {
+                    for (int y { 0 }; y < mnsp.rows; y++) {
+                        Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
+                            (float)cellSize, (float)cellSize };
+                        Cell cell = mnsp.grid[x][y];
+                        Color cellCol = cell.color;
+                        if (cell.revealed && cell.value >= 0)
+                            cellCol = colArr[cell.value];
+
+                        DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
+                        if (cell.value == -1) {
+                            Color mineCol = bgCol;
+                            if (cell.revealed)
+                                mineCol = red;
+                            DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, mineCol);
+                        } else if (cell.value > 0) {
+                            const char* text = numbers[cell.value - 1];
+                            float size = cellSize / 2.0;
+                            DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
+                                size, bgCol);
+                        }
+                    }
+                }
+            }
+            EndTextureMode();
             textureMade = true;
             screenWidth += 100;
             SetWindowSize(screenWidth, screenHeight);
         } else {
             ClearBackground(bgCol);
-            DrawTexture(gameOverTexture, 0, 0, WHITE);
+            DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
             DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 50, 25, lblue);
             DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.),
                 screenHeight / 2. + 25, 30, mnsp.won ? green : red);
