@@ -7,6 +7,8 @@
 Display::Display(int pad, int screenWidth, int screenHeight)
 {
     this->pad = pad;
+    this->screenWidth = screenWidth;
+    this->screenHeight = screenHeight;
 
     menuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     menuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
@@ -24,22 +26,29 @@ void Display::draw()
     case State::Playing: {
         ClearBackground(bgCol);
 
+        if (mnsp.revealedCells == mnsp.rows * mnsp.columns - mnsp.mineCount) {
+            mnsp.won = true;
+            mnsp.endText = "Won!";
+            state = State::GameOver;
+        }
         for (int x { 0 }; x < mnsp.columns; x++) {
             for (int y { 0 }; y < mnsp.rows; y++) {
-                Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad),
-                    (float)pad + y * (cellSize + pad),
-                    (float)cellSize,
-                    (float)cellSize };
+                Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
+                    (float)cellSize, (float)cellSize };
                 Cell cell = mnsp.grid[x][y];
                 Color cellCol = cell.color;
 
                 // checking if cursor is hovering on a cell
-                if (cellPos.x <= mouseHoverX && cellPos.y <= mouseHoverY && mouseHoverX <= cellPos.x + cellPos.width && mouseHoverY <= cellPos.y + cellPos.height && !cell.revealed) {
+                if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, cellPos)) {
                     cellCol = hlt;
                     if (IsMouseButtonPressed(0)) {
                         if (!mnsp.started)
                             mnsp.initGame(x, y, gen);
-                        else
+                        else if (cell.value == -1) {
+                            mnsp.won = false;
+                            state = State::GameOver;
+                            DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, red);
+                        } else
                             mnsp.reveal(x, y);
                     }
                 }
@@ -47,31 +56,19 @@ void Display::draw()
                     cellCol = colArr[cell.value];
 
                 DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
-                if (cell.value == -1)
-                    DrawCircle(cellPos.x + cellSize / 2,
-                        cellPos.y + cellSize / 2,
-                        cellSize / 4,
-                        bgCol);
-                else if (cell.value > 0) {
+                if (cell.value == -1) {
+                    DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
+                } else if (cell.value > 0) {
                     const char* text = numbers[cell.value - 1];
                     float size = cellSize / 2.0;
-                    DrawText(text,
-                        (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2),
-                        cellPos.y + cellSize / 4,
-                        size,
-                        bgCol);
+                    DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
+                        size, bgCol);
                 }
             }
         }
+
         if (IsKeyPressed(KEY_SPACE))
             state = State::Paused;
-        else if (IsKeyPressed(KEY_Q)) {
-            state = State::StartMenu;
-            SetWindowSize(548, 436);
-            screenWidth = 548;
-            screenHeight = 436;
-            mnsp.clear();
-        }
         break;
     }
     case State::StartMenu: {
@@ -88,9 +85,9 @@ void Display::draw()
         if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn1)) {
             btcol1 = gray;
             if (IsMouseButtonPressed(0)) {
-                SetWindowSize(436, 436);
                 screenWidth = 436;
                 screenHeight = 436;
+                SetWindowSize(436, 436);
                 mnsp = Minesweeper(8, 8, 10);
                 cellSize = (436 - pad * (mnsp.columns + 1)) / mnsp.columns;
                 state = State::Playing;
@@ -99,9 +96,9 @@ void Display::draw()
         if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn2)) {
             btcol2 = gray;
             if (IsMouseButtonPressed(0)) {
-                SetWindowSize(548, 548);
                 screenWidth = 548;
                 screenHeight = 548;
+                SetWindowSize(548, 548);
                 mnsp = Minesweeper(16, 16, 40);
                 cellSize = (548 - pad * (mnsp.columns + 1)) / mnsp.columns;
                 state = State::Playing;
@@ -111,39 +108,39 @@ void Display::draw()
         DrawRectangleRounded(menuBtn1, 0.3, 0, btcol1);
         DrawRectangleRounded(menuBtn2, 0.3, 0, btcol2);
 
-        DrawText(text1,
-            (menuBtn1.x + menuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0),
-            menuBtn1.y + 30.0,
-            size1,
-            lblue);
-        DrawText(text2,
-            (menuBtn2.x + menuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0),
-            menuBtn2.y + 30.0,
-            size2,
-            blue);
+        DrawText(text1, (menuBtn1.x + menuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0), menuBtn1.y + 30.0,
+            size1, lblue);
+        DrawText(text2, (menuBtn2.x + menuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0), menuBtn2.y + 30.0,
+            size2, blue);
 
         size1 = menuBtn1.width / 8.0;
         size2 = menuBtn2.width / 8.0;
         text1 = "10 Mines";
         text2 = "40 Mines";
 
-        DrawText(text1,
-            (menuBtn1.x + menuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0),
-            menuBtn1.y + 110.0,
-            size1,
-            red);
-        DrawText(text2,
-            (menuBtn2.x + menuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0),
-            menuBtn2.y + 110.0,
-            size2,
-            red);
-    }
-    case State::GameOver:
-        ClearBackground(bgCol);
+        DrawText(text1, (menuBtn1.x + menuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0), menuBtn1.y + 110.0,
+            size1, red);
+        DrawText(text2, (menuBtn2.x + menuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0), menuBtn2.y + 110.0,
+            size2, red);
         break;
+    }
+    case State::GameOver: {
+        if (!textureMade) {
+            gameOverTexture = LoadTextureFromImage(GetScreenData());
+            textureMade = true;
+            screenWidth += 100;
+            SetWindowSize(screenWidth, screenHeight);
+        } else {
+            ClearBackground(bgCol);
+            DrawTexture(gameOverTexture, 0, 0, WHITE);
+            DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 50, 25, lblue);
+            DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.),
+                screenHeight / 2. + 25, 30, mnsp.won ? green : red);
+        }
+        break;
+    }
     case State::Paused:
         ClearBackground(bgCol);
-        const char* pauseText = "PAUSED";
         DrawText(pauseText, (screenWidth / 2 - MeasureText(pauseText, 50) / 2), screenHeight / 3, 50, hlt);
         if (IsKeyPressed(KEY_SPACE))
             state = State::Playing;
