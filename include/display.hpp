@@ -25,6 +25,7 @@ public:
 
     Rectangle menuBtn1;
     Rectangle menuBtn2;
+    Rectangle gmovBtn;
 
     State state = State::Playing;
 
@@ -35,4 +36,5 @@ public:
 
     Display(int pad, int screenWidth, int screenHeight);
     void draw();
+    void reset();
 };
