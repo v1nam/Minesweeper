@@ -23,7 +23,7 @@ public:
     bool won = false;
 
     std::vector<std::vector<Cell>> grid;
-    char* endText = "Lost";
+    char const* endText = "Lost";
 
     Minesweeper(int rows = 8, int columns = 8, int mineCount = 10);
     std::vector<Vector2> adjacents(int x, int y);
