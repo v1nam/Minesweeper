@@ -12,6 +12,11 @@ enum class State {
 };
 
 class Display {
+private:
+    const char* pauseText = "PAUSED";
+    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
+    char const* numbers[8] = { "1", "2", "3", "4", "5", "6", "7", "8" };
+
 public:
     int screenWidth;
     int screenHeight;
@@ -23,8 +28,8 @@ public:
 
     State state = State::Playing;
 
-    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
-    char const* numbers[8] = { "1", "2", "3", "4", "5", "6", "7", "8" };
+    bool textureMade = false; // for storing whether game over texture is made
+    Texture2D gameOverTexture;
 
     Minesweeper mnsp;
 
