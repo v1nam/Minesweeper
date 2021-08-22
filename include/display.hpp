@@ -23,7 +23,7 @@ public:
 
     State state = State::Playing;
 
-    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, green, yellow, orange, red, teal, aqua, lblue, blue };
+    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
     char const* numbers[8] = { "1", "2", "3", "4", "5", "6", "7", "8" };
 
     Minesweeper mnsp;
