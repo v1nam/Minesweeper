@@ -163,12 +163,22 @@ void Display::draw()
             textureMade = true;
             screenWidth += 100;
             SetWindowSize(screenWidth, screenHeight);
+            gmovBtn = Rectangle { (float)screenWidth - 90, (float)screenHeight - 100, 80.0, 50.0 };
         } else {
             ClearBackground(bgCol);
             DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
             DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 50, 25, lblue);
             DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.),
                 screenHeight / 2. + 25, 30, mnsp.won ? green : red);
+            Color hovCol = gray;
+            if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, gmovBtn)) {
+                hovCol = hlt;
+                if (IsMouseButtonPressed(0))
+                    reset();
+            }
+            DrawRectangleRounded(gmovBtn, 0.3, 0, hovCol);
+            DrawRectangleRoundedLines(gmovBtn, 0.3, 0, 3.0, black);
+            DrawText("M e n u", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("M e n u", 18) / 2.0), gmovBtn.y + 15.0, 18, aqua);
         }
         break;
     }
@@ -179,4 +189,14 @@ void Display::draw()
             state = State::Playing;
         break;
     }
+}
+
+void Display::reset()
+{
+    state = State::StartMenu;
+    screenWidth = 548;
+    screenHeight = 436;
+    SetWindowSize(548, 436);
+    mnsp.clear();
+    textureMade = false;
 }
