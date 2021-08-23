@@ -54,12 +54,14 @@ void Minesweeper::reveal(int x, int y)
     }
 }
 
-void Minesweeper::initGame(int x, int y, std::mt19937 gen)
+void Minesweeper::initGame(int x, int y)
 {
     std::uniform_int_distribution<> rngX(0, columns - 1);
     std::uniform_int_distribution<> rngY(0, rows - 1);
 
     for (int i { 0 }; i < mineCount; i++) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
         int mineX = rngX(gen);
         int mineY = rngY(gen);
 
