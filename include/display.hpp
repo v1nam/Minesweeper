@@ -30,7 +30,8 @@ public:
     State state = State::Playing;
 
     bool textureMade = false; // for storing whether game over texture is made
-    RenderTexture2D gameOverTexture; //= LoadRenderTexture(548, 548);
+    RenderTexture2D gameOverTexture;
+    Texture2D boom = LoadTexture("bang.png");
 
     Minesweeper mnsp;
 
