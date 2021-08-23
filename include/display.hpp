@@ -36,5 +36,8 @@ public:
 
     Display(int pad, int screenWidth, int screenHeight);
     void draw();
+    void drawGame(float mouseHoverX, float mouseHoverY);
+    void drawGameOver(float mouseHoverX, float mouseHoverY);
+    void drawMenu(float mouseHoverX, float mouseHoverY);
     void reset();
 };
