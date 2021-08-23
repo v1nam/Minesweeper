@@ -1,6 +1,5 @@
 #pragma once
 
-#include <random>
 #include <vector>
 
 #include "colors.hpp"
@@ -29,6 +28,6 @@ public:
     std::vector<Vector2> adjacents(int x, int y);
     int countMines(std::vector<Vector2>& adjc);
     void reveal(int x, int y);
-    void initGame(int x, int y, std::mt19937 gen);
+    void initGame(int x, int y);
     void clear();
 };
