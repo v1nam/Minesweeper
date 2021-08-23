@@ -24,6 +24,7 @@ int main()
         EndDrawing();
     }
     UnloadTexture(display.gameOverTexture.texture);
+    UnloadTexture(display.boom);
     UnloadRenderTexture(display.gameOverTexture);
     CloseWindow();
     return 0;
