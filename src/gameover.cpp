@@ -19,15 +19,19 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
 
                     DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
                     if (cell.value == -1) {
-                        Color mineCol = bgCol;
-                        if (cell.revealed)
-                            mineCol = red;
-                        DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, mineCol);
+                        if (cell.revealed) {
+                            float scale = ((float)cellSize / 3.f) / ((float)boom.width / 2.f);
+                            DrawTextureEx(
+                                boom,
+                                Vector2 { cellPos.x + (scale * boom.width) / 3.f, cellPos.y + (scale * boom.width) / 3.f },
+                                0.0, scale, WHITE);
+                        } else
+                            DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
                     } else if (cell.value > 0) {
                         const char* text = numbers[cell.value - 1];
                         float size = cellSize / 2.0;
-                        DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
-                            size, bgCol);
+                        DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2),
+                            cellPos.y + cellSize / 4, size, bgCol);
                     }
                 }
             }
@@ -41,8 +45,8 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         ClearBackground(bgCol);
         DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
         DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 50, 25, lblue);
-        DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.),
-            screenHeight / 2. + 25, 30, mnsp.won ? green : red);
+        DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 25,
+            30, mnsp.won ? green : red);
         Color hovCol = gray;
         if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, gmovBtn)) {
             hovCol = hlt;
@@ -51,6 +55,7 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         }
         DrawRectangleRounded(gmovBtn, 0.3, 0, hovCol);
         DrawRectangleRoundedLines(gmovBtn, 0.3, 0, 3.0, black);
-        DrawText("M e n u", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("M e n u", 18) / 2.0), gmovBtn.y + 15.0, 18, aqua);
+        DrawText("M e n u", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("M e n u", 18) / 2.0), gmovBtn.y + 15.0, 18,
+            aqua);
     }
 }
