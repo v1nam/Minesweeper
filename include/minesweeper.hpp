@@ -9,6 +9,7 @@ struct Cell {
     bool revealed = false;
     int value = 0;
     Color color = gray;
+    bool flagged = false;
 };
 
 class Minesweeper {
