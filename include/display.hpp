@@ -31,7 +31,7 @@ public:
 
     bool textureMade = false; // for storing whether game over texture is made
     RenderTexture2D gameOverTexture;
-    Texture2D boom = LoadTexture("bang.png");
+    Texture2D boom = LoadTexture("boom.png");
 
     Minesweeper mnsp;
 
