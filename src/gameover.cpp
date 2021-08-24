@@ -18,6 +18,13 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
                         cellCol = colArr[cell.value];
 
                     DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
+                    if (cell.flagged) {
+                        float scale = ((float)cellSize / 3.f) / ((float)flag.width / 2.f);
+                        DrawTextureEx(
+                            flag,
+                            Vector2 { cellPos.x + (scale * flag.width) / 3.f, cellPos.y + (scale * flag.width) / 3.f },
+                            0.0, scale, WHITE);
+                    }
                     if (cell.value == -1) {
                         if (cell.revealed) {
                             float scale = ((float)cellSize / 3.f) / ((float)boom.width / 2.f);
