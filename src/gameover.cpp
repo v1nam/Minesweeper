@@ -18,6 +18,18 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
                         cellCol = colArr[cell.value];
 
                     DrawRectangleRounded(cellPos, 0.1, 0, cellCol);
+
+                    if (cell.value == -1) {
+                        DrawRectangleRounded(cellPos, 0.1, 0, Fade(red, 0.4));
+                        if (cell.revealed) {
+                            float scale = ((float)cellSize / 3.f) / ((float)boom.width / 2.f);
+                            DrawTextureEx(
+                                boom,
+                                Vector2 { cellPos.x + (scale * boom.width) / 3.f, cellPos.y + (scale * boom.width) / 3.f },
+                                0.0, scale, WHITE);
+                        } else if (!cell.flagged)
+                            DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
+                    }
                     if (cell.flagged) {
                         float scale = ((float)cellSize / 3.f) / ((float)flag.width / 2.f);
                         DrawTextureEx(
@@ -25,16 +37,7 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
                             Vector2 { cellPos.x + (scale * flag.width) / 3.f, cellPos.y + (scale * flag.width) / 3.f },
                             0.0, scale, WHITE);
                     }
-                    if (cell.value == -1) {
-                        if (cell.revealed) {
-                            float scale = ((float)cellSize / 3.f) / ((float)boom.width / 2.f);
-                            DrawTextureEx(
-                                boom,
-                                Vector2 { cellPos.x + (scale * boom.width) / 3.f, cellPos.y + (scale * boom.width) / 3.f },
-                                0.0, scale, WHITE);
-                        } else
-                            DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
-                    } else if (cell.value > 0) {
+                    if (cell.value > 0) {
                         const char* text = numbers[cell.value - 1];
                         float size = cellSize / 2.0;
                         DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2),
