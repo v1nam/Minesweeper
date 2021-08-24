@@ -22,16 +22,20 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
             // checking if cursor is hovering on a cell
             if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, cellPos)) {
                 cellCol = hlt;
-                if (IsMouseButtonPressed(0)) {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     if (!mnsp.started)
                         mnsp.initGame(x, y);
                     else if (cell.value == -1) {
                         mnsp.won = false;
                         cell.revealed = true;
+                        cell.flagged = false;
                         state = State::GameOver;
                         //DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, red);
                     } else
                         mnsp.reveal(x, y);
+                } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+                    if (!cell.revealed)
+                        cell.flagged = !cell.flagged;
                 }
             }
             if (cell.revealed && cell.value >= 0)
@@ -42,7 +46,14 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
                 if (cell.value == -1) {
                     DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, bgCol);
                 }
-                */
+            */
+            if (cell.flagged) {
+                float scale = ((float)cellSize / 3.f) / ((float)flag.width / 2.f);
+                DrawTextureEx(
+                    flag,
+                    Vector2 { cellPos.x + (scale * flag.width) / 3.f, cellPos.y + (scale * flag.width) / 3.f },
+                    0.0, scale, WHITE);
+            }
             if (cell.value > 0) {
                 const char* text = numbers[cell.value - 1];
                 float size = cellSize / 2.0;
