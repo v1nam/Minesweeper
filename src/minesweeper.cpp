@@ -45,6 +45,7 @@ void Minesweeper::reveal(int x, int y)
         std::vector<Vector2> adjc = adjacents(x, y);
         grid[x][y].value = countMines(adjc);
         grid[x][y].revealed = true;
+        grid[x][y].flagged = false;
         revealedCells++;
 
         if (grid[x][y].value == 0) {
