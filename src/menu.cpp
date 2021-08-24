@@ -16,7 +16,7 @@ void Display::drawMenu(float mouseHoverX, float mouseHoverY)
 
     if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn1)) {
         btcol1 = gray;
-        if (IsMouseButtonPressed(0)) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 404;
             screenHeight = 404;
             SetWindowSize(screenWidth, screenHeight);
@@ -27,7 +27,7 @@ void Display::drawMenu(float mouseHoverX, float mouseHoverY)
     }
     if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn2)) {
         btcol2 = gray;
-        if (IsMouseButtonPressed(0)) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 548;
             screenHeight = 548;
             SetWindowSize(screenWidth, screenHeight);
