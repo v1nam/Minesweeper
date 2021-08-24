@@ -54,8 +54,8 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
     } else {
         ClearBackground(bgCol);
         DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
-        DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 50, 25, lblue);
-        DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 25,
+        DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 25, 25, lblue);
+        DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 20,
             30, mnsp.won ? green : red);
         Color hovCol = gray;
         if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, gmovBtn)) {
