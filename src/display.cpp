@@ -1,3 +1,4 @@
+#include <iostream>
 #include <random>
 #include <string>
 
@@ -42,6 +43,25 @@ void Display::draw()
             state = State::Playing;
         break;
     }
+    }
+}
+
+void Display::drawClockFlag()
+{
+    DrawTexture(clock, screenWidth - 75 - clock.width / 2, 2, WHITE);
+    DrawTexture(disflag, (screenWidth - 75 - disflag.width / 2) + 5, 100, WHITE);
+    std::string fcDis = mnsp.flagCountDisplay();
+    DrawText(fcDis.c_str(), screenWidth - 75 - MeasureText(fcDis.c_str(), 20) / 2, 155, 20, lblue);
+    if (mnsp.started) {
+        if (state == State::Playing)
+            timeElapsed.timeCounter += GetFrameTime();
+        timeElapsed.seconds = (int)timeElapsed.timeCounter % 60;
+        timeElapsed.minutes = (int)timeElapsed.timeCounter / 60;
+        std::string text = timeElapsed.getTimeDisplay();
+        DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 20) / 2), 50, 20, lblue);
+    } else {
+        const char* text = "00:00";
+        DrawText(text, (screenWidth - 150) + 75 - (MeasureText(text, 20) / 2), 50, 20, lblue);
     }
 }
 
