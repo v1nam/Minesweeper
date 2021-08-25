@@ -53,5 +53,6 @@ public:
     void drawGame(float mouseHoverX, float mouseHoverY);
     void drawGameOver(float mouseHoverX, float mouseHoverY);
     void drawMenu(float mouseHoverX, float mouseHoverY);
+    void drawClockFlag();
     void reset();
 };
