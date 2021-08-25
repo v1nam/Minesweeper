@@ -25,6 +25,9 @@ int main()
     }
     UnloadTexture(display.gameOverTexture.texture);
     UnloadTexture(display.boom);
+    UnloadTexture(display.flag);
+    UnloadTexture(display.disflag);
+    UnloadTexture(display.clock);
     UnloadRenderTexture(display.gameOverTexture);
     CloseWindow();
     return 0;
