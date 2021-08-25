@@ -8,7 +8,7 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
 {
     ClearBackground(bgCol);
 
-    DrawTexture(clock, screenWidth - 130, 12, WHITE);
+    DrawTexture(clock, screenWidth - 75 - clock.width / 2, 2, WHITE);
     if (mnsp.started) {
         timeElapsed.timeCounter += GetFrameTime();
         timeElapsed.seconds = (int)timeElapsed.timeCounter % 60;
