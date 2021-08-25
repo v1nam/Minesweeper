@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <ctime>
 #include <random>
+#include <string>
 #include <vector>
 
 #include "minesweeper.hpp"
@@ -14,6 +15,7 @@ Minesweeper::Minesweeper(int rows, int columns, int mineCount)
 
     for (int _j { 0 }; _j < this->columns; _j++)
         grid.push_back(std::vector<Cell>(this->rows));
+    mineCountStr = std::to_string(mineCount);
 }
 
 std::vector<Vector2> Minesweeper::adjacents(int x, int y)
@@ -42,14 +44,17 @@ int Minesweeper::countMines(std::vector<Vector2>& adjc)
 
 void Minesweeper::reveal(int x, int y)
 {
-    if (!grid[x][y].revealed && grid[x][y].value != -1) {
+    Cell& cell = grid[x][y];
+    if (!cell.revealed && cell.value != -1) {
         std::vector<Vector2> adjc = adjacents(x, y);
-        grid[x][y].value = countMines(adjc);
-        grid[x][y].revealed = true;
-        grid[x][y].flagged = false;
+        cell.value = countMines(adjc);
+        cell.revealed = true;
+        if (cell.flagged) {
+            cell.flagged = false;
+            flagCount--;
+        }
         revealedCells++;
-
-        if (grid[x][y].value == 0) {
+        if (cell.value == 0) {
             for (Vector2& adPos : adjc)
                 this->reveal(adPos.x, adPos.y);
         }
@@ -84,4 +89,12 @@ void Minesweeper::clear()
     started = false;
 
     grid.clear();
+}
+
+std::string Minesweeper::flagCountDisplay()
+{
+    std::string fcDis = std::to_string(flagCount);
+    fcDis += " / ";
+    fcDis += mineCountStr;
+    return fcDis;
 }
