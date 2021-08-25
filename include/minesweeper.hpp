@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "colors.hpp"
@@ -13,11 +14,15 @@ struct Cell {
 };
 
 class Minesweeper {
+private:
+    std::string mineCountStr;
+
 public:
     int rows;
     int columns;
     int mineCount;
     int revealedCells = 0;
+    int flagCount = 0;
 
     bool started = false;
     bool won = false;
@@ -31,4 +36,5 @@ public:
     void reveal(int x, int y);
     void initGame(int x, int y);
     void clear();
+    std::string flagCountDisplay();
 };
