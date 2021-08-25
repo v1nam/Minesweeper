@@ -14,10 +14,10 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
         timeElapsed.seconds = (int)timeElapsed.timeCounter % 60;
         timeElapsed.minutes = (int)timeElapsed.timeCounter / 60;
         std::string text = timeElapsed.getTimeDisplay();
-        DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 16) / 2), 50, 20, lblue);
+        DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 20) / 2), 50, 20, lblue);
     } else {
-        const char* text = "0:00";
-        DrawText(text, (screenWidth - 150) + 75 - (MeasureText(text, 16) / 2), 50, 20, lblue);
+        const char* text = "00:00";
+        DrawText(text, (screenWidth - 150) + 75 - (MeasureText(text, 20) / 2), 50, 20, lblue);
     }
 
     if (mnsp.revealedCells == mnsp.rows * mnsp.columns - mnsp.mineCount) {
