@@ -62,8 +62,10 @@ std::string TimeDisplay::getTimeDisplay()
     std::string minDisp;
     if (seconds < 10)
         secondDisp = "0";
+    if (minutes < 10)
+        minDisp = "0";
     secondDisp += std::to_string(seconds);
-    minDisp = std::to_string(minutes);
+    minDisp += std::to_string(minutes);
     minDisp += ":";
     minDisp += secondDisp;
     return minDisp;
