@@ -13,6 +13,9 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
             DrawTexture(clock, screenWidth - 75 - clock.width / 2, 2, WHITE);
             std::string text = timeElapsed.getTimeDisplay();
             DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 20) / 2), 50, 20, lblue);
+            DrawTexture(disflag, (screenWidth - 75 - disflag.width / 2) + 5, 100, WHITE);
+            std::string fcDis = mnsp.flagCountDisplay();
+            DrawText(fcDis.c_str(), screenWidth - 75 - MeasureText(fcDis.c_str(), 20) / 2, 155, 20, lblue);
             for (int x { 0 }; x < mnsp.columns; x++) {
                 for (int y { 0 }; y < mnsp.rows; y++) {
                     Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
@@ -54,12 +57,12 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         EndTextureMode();
         textureMade = true;
         SetWindowSize(screenWidth, screenHeight);
-        gmovBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 100, 100.0, 50.0 };
+        gmovBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
     } else {
         ClearBackground(bgCol);
         DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
-        DrawText("You", (screenWidth - 150) + (75 - MeasureText("You", 25) / 2.), screenHeight / 2 - 25, 25, lblue);
-        DrawText(mnsp.endText, (screenWidth - 150) + (75 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 20,
+        DrawText("You", (screenWidth - 150) + (75 - MeasureText("You", 25) / 2.), screenHeight / 2 + 35, 25, lblue);
+        DrawText(mnsp.endText, (screenWidth - 150) + (75 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 70,
             30, mnsp.won ? green : red);
         Color hovCol = gray;
         if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, gmovBtn)) {
