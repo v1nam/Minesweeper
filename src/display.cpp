@@ -1,4 +1,5 @@
 #include <random>
+#include <string>
 
 #include "colors.hpp"
 #include "display.hpp"
@@ -47,9 +48,23 @@ void Display::draw()
 void Display::reset()
 {
     state = State::StartMenu;
+    timeElapsed = TimeDisplay { 0, 0 };
     screenWidth = 548;
     screenHeight = 436;
     SetWindowSize(548, 436);
     mnsp.clear();
     textureMade = false;
+}
+
+std::string TimeDisplay::getTimeDisplay()
+{
+    std::string secondDisp;
+    std::string minDisp;
+    if (seconds < 10)
+        secondDisp = "0";
+    secondDisp += std::to_string(seconds);
+    minDisp = std::to_string(minutes);
+    minDisp += ":";
+    minDisp += secondDisp;
+    return minDisp;
 }
