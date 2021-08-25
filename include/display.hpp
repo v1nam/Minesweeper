@@ -44,6 +44,7 @@ public:
     Texture2D boom = LoadTexture("assets/boom.png");
     Texture2D flag = LoadTexture("assets/flag.png");
     Texture2D clock = LoadTexture("assets/clock.png");
+    Texture2D disflag = LoadTexture("assets/disflag.png");
 
     Minesweeper mnsp;
 
