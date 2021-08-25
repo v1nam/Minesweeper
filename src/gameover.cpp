@@ -1,3 +1,5 @@
+#include <string>
+
 #include "colors.hpp"
 #include "display.hpp"
 #include "raylib.h"
@@ -8,6 +10,9 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         BeginTextureMode(gameOverTexture);
         {
             ClearBackground(bgCol);
+            DrawTexture(clock, screenWidth - 75 - clock.width / 2, 2, WHITE);
+            std::string text = timeElapsed.getTimeDisplay();
+            DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 16) / 2), 50, 20, lblue);
             for (int x { 0 }; x < mnsp.columns; x++) {
                 for (int y { 0 }; y < mnsp.rows; y++) {
                     Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
