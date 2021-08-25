@@ -69,7 +69,7 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         }
         DrawRectangleRounded(gmovBtn, 0.2, 0, hovCol);
         DrawRectangleRoundedLines(gmovBtn, 0.2, 0, 3.0, black);
-        DrawText("M e n u", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("M e n u", 18) / 2.0), gmovBtn.y + 15.0, 18,
+        DrawText("Menu", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("Menu", 20) / 2.0), gmovBtn.y + 15.0, 20,
             aqua);
     }
 }
