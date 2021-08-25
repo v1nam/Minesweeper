@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "colors.hpp"
 #include "minesweeper.hpp"
 #include "raylib.h"
@@ -9,6 +11,13 @@ enum class State {
     Playing,
     GameOver,
     StartMenu
+};
+
+struct TimeDisplay {
+    int minutes;
+    int seconds;
+    float timeCounter = 0.0;
+    std::string getTimeDisplay();
 };
 
 class Display {
@@ -28,11 +37,13 @@ public:
     Rectangle gmovBtn;
 
     State state = State::Playing;
+    TimeDisplay timeElapsed = TimeDisplay { 0, 0 };
 
     bool textureMade = false; // for storing whether game over texture is made
     RenderTexture2D gameOverTexture;
     Texture2D boom = LoadTexture("assets/boom.png");
     Texture2D flag = LoadTexture("assets/flag.png");
+    Texture2D clock = LoadTexture("assets/clock.png");
 
     Minesweeper mnsp;
 
