@@ -1,3 +1,5 @@
+#include <string>
+
 #include "colors.hpp"
 #include "display.hpp"
 #include "raylib.h"
@@ -5,6 +7,18 @@
 void Display::drawGame(float mouseHoverX, float mouseHoverY)
 {
     ClearBackground(bgCol);
+
+    DrawTexture(clock, screenWidth - 130, 12, WHITE);
+    if (mnsp.started) {
+        timeElapsed.timeCounter += GetFrameTime();
+        timeElapsed.seconds = (int)timeElapsed.timeCounter % 60;
+        timeElapsed.minutes = (int)timeElapsed.timeCounter / 60;
+        std::string text = timeElapsed.getTimeDisplay();
+        DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 16) / 2), 50, 20, lblue);
+    } else {
+        const char* text = "0:00";
+        DrawText(text, (screenWidth - 150) + 75 - (MeasureText(text, 16) / 2), 50, 20, lblue);
+    }
 
     if (mnsp.revealedCells == mnsp.rows * mnsp.columns - mnsp.mineCount) {
         mnsp.won = true;
