@@ -38,9 +38,11 @@ void Display::draw()
     }
     case State::Paused: {
         ClearBackground(bgCol);
-        DrawText(pauseText, (screenWidth / 2 - MeasureText(pauseText, 50) / 2), screenHeight / 3, 50, hlt);
+        DrawText(pauseText, ((screenWidth - 150) / 2 - MeasureText(pauseText, 50) / 2), screenHeight / 3, 50, hlt);
+        DrawLine(screenWidth - 150, 0, screenWidth - 150, screenHeight, black);
         if (IsKeyPressed(KEY_SPACE))
             state = State::Playing;
+        drawClockFlag();
         break;
     }
     }
