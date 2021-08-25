@@ -45,7 +45,10 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
                     else if (cell.value == -1) {
                         mnsp.won = false;
                         cell.revealed = true;
-                        cell.flagged = false;
+                        if (cell.flagged) {
+                            cell.flagged = false;
+                            mnsp.flagCount--;
+                        }
                         state = State::GameOver;
                         //DrawCircle(cellPos.x + cellSize / 2, cellPos.y + cellSize / 2, cellSize / 4, red);
                     } else
@@ -55,7 +58,7 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
                         if (cell.flagged) {
                             cell.flagged = false;
                             mnsp.flagCount--;
-                        } else if (mnsp.flagCount <= mnsp.mineCount) {
+                        } else if (mnsp.flagCount < mnsp.mineCount) {
                             cell.flagged = true;
                             mnsp.flagCount++;
                         }
