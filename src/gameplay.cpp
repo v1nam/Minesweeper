@@ -9,6 +9,9 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
     ClearBackground(bgCol);
 
     DrawTexture(clock, screenWidth - 75 - clock.width / 2, 2, WHITE);
+    DrawTexture(disflag, (screenWidth - 75 - disflag.width / 2) + 5, 100, WHITE);
+    std::string fcDis = mnsp.flagCountDisplay();
+    DrawText(fcDis.c_str(), screenWidth - 75 - MeasureText(fcDis.c_str(), 20) / 2, 155, 20, lblue);
     if (mnsp.started) {
         timeElapsed.timeCounter += GetFrameTime();
         timeElapsed.seconds = (int)timeElapsed.timeCounter % 60;
@@ -48,8 +51,15 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
                     } else
                         mnsp.reveal(x, y);
                 } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
-                    if (!cell.revealed)
-                        cell.flagged = !cell.flagged;
+                    if (!cell.revealed) {
+                        if (cell.flagged) {
+                            cell.flagged = false;
+                            mnsp.flagCount--;
+                        } else {
+                            cell.flagged = true;
+                            mnsp.flagCount++;
+                        }
+                    }
                 }
             }
             if (cell.revealed && cell.value >= 0)
