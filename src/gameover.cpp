@@ -48,14 +48,13 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         }
         EndTextureMode();
         textureMade = true;
-        screenWidth += 100;
         SetWindowSize(screenWidth, screenHeight);
-        gmovBtn = Rectangle { (float)screenWidth - 90, (float)screenHeight - 100, 80.0, 50.0 };
+        gmovBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 100, 100.0, 50.0 };
     } else {
         ClearBackground(bgCol);
         DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
-        DrawText("You", (screenWidth - 100) + (50 - MeasureText("You", 25) / 2.), screenHeight / 2 - 25, 25, lblue);
-        DrawText(mnsp.endText, (screenWidth - 100) + (50 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 20,
+        DrawText("You", (screenWidth - 150) + (75 - MeasureText("You", 25) / 2.), screenHeight / 2 - 25, 25, lblue);
+        DrawText(mnsp.endText, (screenWidth - 150) + (75 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 20,
             30, mnsp.won ? green : red);
         Color hovCol = gray;
         if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, gmovBtn)) {
@@ -63,8 +62,8 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
             if (IsMouseButtonPressed(0))
                 reset();
         }
-        DrawRectangleRounded(gmovBtn, 0.3, 0, hovCol);
-        DrawRectangleRoundedLines(gmovBtn, 0.3, 0, 3.0, black);
+        DrawRectangleRounded(gmovBtn, 0.2, 0, hovCol);
+        DrawRectangleRoundedLines(gmovBtn, 0.2, 0, 3.0, black);
         DrawText("M e n u", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("M e n u", 18) / 2.0), gmovBtn.y + 15.0, 18,
             aqua);
     }
