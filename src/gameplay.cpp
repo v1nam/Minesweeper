@@ -55,7 +55,7 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
                         if (cell.flagged) {
                             cell.flagged = false;
                             mnsp.flagCount--;
-                        } else {
+                        } else if (mnsp.flagCount <= mnsp.mineCount) {
                             cell.flagged = true;
                             mnsp.flagCount++;
                         }
