@@ -19,9 +19,10 @@ void Display::drawMenu(float mouseHoverX, float mouseHoverY)
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 404;
             screenHeight = 404;
-            SetWindowSize(screenWidth, screenHeight);
             mnsp = Minesweeper(8, 8, 10);
             cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
+            screenWidth += 150;
+            SetWindowSize(screenWidth, screenHeight);
             state = State::Playing;
         }
     }
@@ -30,9 +31,10 @@ void Display::drawMenu(float mouseHoverX, float mouseHoverY)
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 548;
             screenHeight = 548;
-            SetWindowSize(screenWidth, screenHeight);
             mnsp = Minesweeper(16, 16, 40);
             cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
+            screenWidth += 150;
+            SetWindowSize(screenWidth, screenHeight);
             state = State::Playing;
         }
     }
