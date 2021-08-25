@@ -87,6 +87,7 @@ void Minesweeper::clear()
     mineCount = 0;
     revealedCells = 0;
     started = false;
+    flagCount = 0;
 
     grid.clear();
 }
