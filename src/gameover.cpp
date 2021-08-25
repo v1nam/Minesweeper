@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 #include "colors.hpp"
@@ -10,17 +11,11 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         BeginTextureMode(gameOverTexture);
         {
             ClearBackground(bgCol);
-            DrawTexture(clock, screenWidth - 75 - clock.width / 2, 2, WHITE);
-            std::string text = timeElapsed.getTimeDisplay();
-            DrawText(text.c_str(), (screenWidth - 150) + 75 - (MeasureText(text.c_str(), 20) / 2), 50, 20, lblue);
-            DrawTexture(disflag, (screenWidth - 75 - disflag.width / 2) + 5, 100, WHITE);
-            std::string fcDis = mnsp.flagCountDisplay();
-            DrawText(fcDis.c_str(), screenWidth - 75 - MeasureText(fcDis.c_str(), 20) / 2, 155, 20, lblue);
             for (int x { 0 }; x < mnsp.columns; x++) {
                 for (int y { 0 }; y < mnsp.rows; y++) {
                     Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
                         (float)cellSize, (float)cellSize };
-                    Cell cell = mnsp.grid[x][y];
+                    Cell& cell = mnsp.grid[x][y];
                     Color cellCol = cell.color;
                     if (cell.revealed && cell.value >= 0)
                         cellCol = colArr[cell.value];
@@ -56,7 +51,6 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         }
         EndTextureMode();
         textureMade = true;
-        SetWindowSize(screenWidth, screenHeight);
         gmovBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
     } else {
         ClearBackground(bgCol);
@@ -74,5 +68,6 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         DrawRectangleRoundedLines(gmovBtn, 0.2, 0, 3.0, black);
         DrawText("Menu", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("Menu", 20) / 2.0), gmovBtn.y + 15.0, 20,
             aqua);
+        drawClockFlag();
     }
 }
