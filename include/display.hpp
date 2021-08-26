@@ -32,9 +32,12 @@ public:
     int pad;
     int cellSize;
 
-    Rectangle menuBtn1;
-    Rectangle menuBtn2;
-    Rectangle gmovBtn;
+    float mouseHoverX;
+    float mouseHoverY;
+
+    Rectangle startMenuBtn1;
+    Rectangle startMenuBtn2;
+    Rectangle menuBtn;
 
     State state = State::Playing;
     TimeDisplay timeElapsed = TimeDisplay { 0, 0 };
@@ -50,9 +53,10 @@ public:
 
     Display(int pad, int screenWidth, int screenHeight);
     void draw();
-    void drawGame(float mouseHoverX, float mouseHoverY);
-    void drawGameOver(float mouseHoverX, float mouseHoverY);
-    void drawMenu(float mouseHoverX, float mouseHoverY);
+    void drawGame();
+    void drawGameOver();
+    void drawMenu();
     void drawClockFlag();
+    void drawMenuBtn();
     void reset();
 };
