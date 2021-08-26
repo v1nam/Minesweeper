@@ -12,6 +12,7 @@ int main()
 
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Minesweeper");
+    SetWindowIcon(LoadImage("assets/iconmine.png"));
 
     Display display = Display(4, screenWidth, screenHeight);
     display.state = State::StartMenu;
