@@ -13,27 +13,27 @@ Display::Display(int pad, int screenWidth, int screenHeight)
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
 
-    menuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
-    menuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
+    startMenuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
+    startMenuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     gameOverTexture = LoadRenderTexture(548, 548);
 }
 
 void Display::draw()
 {
-    int mouseHoverX = GetMouseX();
-    int mouseHoverY = GetMouseY();
+    mouseHoverX = GetMouseX();
+    mouseHoverY = GetMouseY();
 
     switch (state) {
     case State::Playing: {
-        drawGame(mouseHoverX, mouseHoverY);
+        drawGame();
         break;
     }
     case State::StartMenu: {
-        drawMenu(mouseHoverX, mouseHoverY);
+        drawMenu();
         break;
     }
     case State::GameOver: {
-        drawGameOver(mouseHoverX, mouseHoverY);
+        drawGameOver();
         break;
     }
     case State::Paused: {
@@ -43,6 +43,7 @@ void Display::draw()
         if (IsKeyPressed(KEY_SPACE))
             state = State::Playing;
         drawClockFlag();
+        drawMenuBtn();
         break;
     }
     }
@@ -76,6 +77,20 @@ void Display::reset()
     SetWindowSize(548, 436);
     mnsp.clear();
     textureMade = false;
+}
+
+void Display::drawMenuBtn()
+{
+    Color hovCol = gray;
+    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, menuBtn)) {
+        hovCol = hlt;
+        if (IsMouseButtonPressed(0))
+            reset();
+    }
+    DrawRectangleRounded(menuBtn, 0.2, 0, hovCol);
+    DrawRectangleRoundedLines(menuBtn, 0.2, 0, 3.0, black);
+    DrawText("Menu", menuBtn.x + (menuBtn.width / 2.0 - MeasureText("Menu", 20) / 2.0), menuBtn.y + 15.0, 20,
+        aqua);
 }
 
 std::string TimeDisplay::getTimeDisplay()
