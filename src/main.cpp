@@ -12,7 +12,9 @@ int main()
 
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Minesweeper");
-    SetWindowIcon(LoadImage("assets/iconmine.png"));
+
+    Image icon = LoadImage("assets/iconmine.png");
+    SetWindowIcon(icon);
 
     Display display = Display(4, screenWidth, screenHeight);
     display.state = State::StartMenu;
@@ -29,6 +31,7 @@ int main()
     UnloadTexture(display.flag);
     UnloadTexture(display.disflag);
     UnloadTexture(display.clock);
+    UnloadImage(icon);
     UnloadRenderTexture(display.gameOverTexture);
     CloseWindow();
     return 0;
