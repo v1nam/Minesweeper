@@ -1,4 +1,4 @@
-#include <iostream>
+#include <functional>
 #include <random>
 #include <string>
 
@@ -43,7 +43,16 @@ void Display::draw()
         if (IsKeyPressed(KEY_SPACE))
             state = State::Playing;
         drawClockFlag();
-        drawMenuBtn();
+
+        Rectangle& mbtnRef = menuBtn;
+        Rectangle& pbtnRef = pauseBtn;
+
+        drawSideBtn("Menu", std::bind(&Display::reset, this), mbtnRef);
+        drawSideBtn(
+            "Resume", [this]() {
+                this->state = State::Playing;
+            },
+            pbtnRef);
         break;
     }
     }
@@ -79,17 +88,17 @@ void Display::reset()
     textureMade = false;
 }
 
-void Display::drawMenuBtn()
+void Display::drawSideBtn(const char* text, std::function<void()> action, Rectangle& dims)
 {
     Color hovCol = gray;
-    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, menuBtn)) {
+    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, dims)) {
         hovCol = hlt;
         if (IsMouseButtonPressed(0))
-            reset();
+            action();
     }
-    DrawRectangleRounded(menuBtn, 0.2, 0, hovCol);
-    DrawRectangleRoundedLines(menuBtn, 0.2, 0, 3.0, black);
-    DrawText("Menu", menuBtn.x + (menuBtn.width / 2.0 - MeasureText("Menu", 20) / 2.0), menuBtn.y + 15.0, 20,
+    DrawRectangleRounded(dims, 0.2, 0, hovCol);
+    DrawRectangleRoundedLines(dims, 0.2, 0, 3.0, black);
+    DrawText(text, dims.x + (dims.width / 2.0 - MeasureText(text, 20) / 2.0), dims.y + 15.0, 20,
         aqua);
 }
 
