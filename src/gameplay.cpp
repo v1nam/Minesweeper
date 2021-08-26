@@ -4,10 +4,9 @@
 #include "display.hpp"
 #include "raylib.h"
 
-void Display::drawGame(float mouseHoverX, float mouseHoverY)
+void Display::drawGame()
 {
     ClearBackground(bgCol);
-    drawClockFlag();
 
     if (mnsp.revealedCells == mnsp.rows * mnsp.columns - mnsp.mineCount) {
         mnsp.won = true;
@@ -15,6 +14,10 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
         state = State::GameOver;
         return;
     }
+
+    drawClockFlag();
+    drawMenuBtn();
+
     for (int x { 0 }; x < mnsp.columns; x++) {
         for (int y { 0 }; y < mnsp.rows; y++) {
             Rectangle cellPos = Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + pad),
@@ -76,6 +79,6 @@ void Display::drawGame(float mouseHoverX, float mouseHoverY)
         }
     }
 
-    if (IsKeyPressed(KEY_SPACE))
+    if (IsKeyPressed(KEY_SPACE) || !IsWindowFocused())
         state = State::Paused;
 }
