@@ -14,7 +14,7 @@ void Display::drawMenu()
     Color btcol1 = black;
     Color btcol2 = black;
 
-    if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, startMenuBtn1)) {
+    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, startMenuBtn1)) {
         btcol1 = gray;
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 404;
@@ -27,7 +27,7 @@ void Display::drawMenu()
             state = State::Playing;
         }
     }
-    if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, startMenuBtn2)) {
+    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, startMenuBtn2)) {
         btcol2 = gray;
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 548;

@@ -26,7 +26,7 @@ void Display::drawGame()
             Color cellCol = cell.color;
 
             // checking if cursor is hovering on a cell
-            if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, cellPos)) {
+            if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, cellPos)) {
                 cellCol = hlt;
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     if (!mnsp.started)
