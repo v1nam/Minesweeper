@@ -5,7 +5,7 @@
 #include "display.hpp"
 #include "raylib.h"
 
-void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
+void Display::drawGameOver()
 {
     if (!textureMade) {
         BeginTextureMode(gameOverTexture);
@@ -51,23 +51,13 @@ void Display::drawGameOver(float mouseHoverX, float mouseHoverY)
         }
         EndTextureMode();
         textureMade = true;
-        gmovBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
     } else {
         ClearBackground(bgCol);
         DrawTextureRec(gameOverTexture.texture, Rectangle { 0, 0, 548, -548 }, Vector2 { 0, 0 }, WHITE);
         DrawText("You", (screenWidth - 150) + (75 - MeasureText("You", 25) / 2.), screenHeight / 2 + 35, 25, lblue);
         DrawText(mnsp.endText, (screenWidth - 150) + (75 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 70,
             30, mnsp.won ? green : red);
-        Color hovCol = gray;
-        if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, gmovBtn)) {
-            hovCol = hlt;
-            if (IsMouseButtonPressed(0))
-                reset();
-        }
-        DrawRectangleRounded(gmovBtn, 0.2, 0, hovCol);
-        DrawRectangleRoundedLines(gmovBtn, 0.2, 0, 3.0, black);
-        DrawText("Menu", gmovBtn.x + (gmovBtn.width / 2.0 - MeasureText("Menu", 20) / 2.0), gmovBtn.y + 15.0, 20,
-            aqua);
+        drawMenuBtn();
         drawClockFlag();
     }
 }
