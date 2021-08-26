@@ -1,3 +1,4 @@
+#include <functional>
 #include <string>
 
 #include "colors.hpp"
@@ -16,7 +17,15 @@ void Display::drawGame()
     }
 
     drawClockFlag();
-    drawMenuBtn();
+    Rectangle& mbtnRef = menuBtn;
+    Rectangle& pbtnRef = pauseBtn;
+
+    drawSideBtn("Menu", std::bind(&Display::reset, this), mbtnRef);
+    drawSideBtn(
+        "Pause", [this]() {
+            this->state = State::Paused;
+        },
+        pbtnRef);
 
     for (int x { 0 }; x < mnsp.columns; x++) {
         for (int y { 0 }; y < mnsp.rows; y++) {
