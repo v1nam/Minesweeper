@@ -24,6 +24,7 @@ void Display::drawMenu()
             screenWidth += 150;
             SetWindowSize(screenWidth, screenHeight);
             menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
+            pauseBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 130, 100.0, 50.0 };
             state = State::Playing;
         }
     }
@@ -37,6 +38,7 @@ void Display::drawMenu()
             screenWidth += 150;
             SetWindowSize(screenWidth, screenHeight);
             menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
+            pauseBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 130, 100.0, 50.0 };
             state = State::Playing;
         }
     }
