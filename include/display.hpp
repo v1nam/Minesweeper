@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string>
 
 #include "colors.hpp"
@@ -38,6 +39,7 @@ public:
     Rectangle startMenuBtn1;
     Rectangle startMenuBtn2;
     Rectangle menuBtn;
+    Rectangle pauseBtn;
 
     State state = State::Playing;
     TimeDisplay timeElapsed = TimeDisplay { 0, 0 };
@@ -57,6 +59,6 @@ public:
     void drawGameOver();
     void drawMenu();
     void drawClockFlag();
-    void drawMenuBtn();
+    void drawSideBtn(const char* text, std::function<void()>, Rectangle& dims);
     void reset();
 };
