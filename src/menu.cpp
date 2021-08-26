@@ -2,19 +2,19 @@
 #include "display.hpp"
 #include "raylib.h"
 
-void Display::drawMenu(float mouseHoverX, float mouseHoverY)
+void Display::drawMenu()
 {
     ClearBackground(bgCol);
 
-    float size1 = menuBtn1.width / 4.0;
-    float size2 = menuBtn2.width / 4.0;
+    float size1 = startMenuBtn1.width / 4.0;
+    float size2 = startMenuBtn2.width / 4.0;
     const char* text1 = "8 x 8";
     const char* text2 = "16 x 16";
 
     Color btcol1 = black;
     Color btcol2 = black;
 
-    if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn1)) {
+    if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, startMenuBtn1)) {
         btcol1 = gray;
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 404;
@@ -23,10 +23,11 @@ void Display::drawMenu(float mouseHoverX, float mouseHoverY)
             cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
             screenWidth += 150;
             SetWindowSize(screenWidth, screenHeight);
+            menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
             state = State::Playing;
         }
     }
-    if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, menuBtn2)) {
+    if (CheckCollisionPointRec(Vector2 { (float)mouseHoverX, (float)mouseHoverY }, startMenuBtn2)) {
         btcol2 = gray;
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             screenWidth = 548;
@@ -35,25 +36,26 @@ void Display::drawMenu(float mouseHoverX, float mouseHoverY)
             cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
             screenWidth += 150;
             SetWindowSize(screenWidth, screenHeight);
+            menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
             state = State::Playing;
         }
     }
 
-    DrawRectangleRounded(menuBtn1, 0.3, 0, btcol1);
-    DrawRectangleRounded(menuBtn2, 0.3, 0, btcol2);
+    DrawRectangleRounded(startMenuBtn1, 0.3, 0, btcol1);
+    DrawRectangleRounded(startMenuBtn2, 0.3, 0, btcol2);
 
-    DrawText(text1, (menuBtn1.x + menuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0), menuBtn1.y + 30.0,
+    DrawText(text1, (startMenuBtn1.x + startMenuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0), startMenuBtn1.y + 30.0,
         size1, lblue);
-    DrawText(text2, (menuBtn2.x + menuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0), menuBtn2.y + 30.0,
+    DrawText(text2, (startMenuBtn2.x + startMenuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0), startMenuBtn2.y + 30.0,
         size2, blue);
 
-    size1 = menuBtn1.width / 8.0;
-    size2 = menuBtn2.width / 8.0;
+    size1 = startMenuBtn1.width / 8.0;
+    size2 = startMenuBtn2.width / 8.0;
     text1 = "10 Mines";
     text2 = "40 Mines";
 
-    DrawText(text1, (menuBtn1.x + menuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0), menuBtn1.y + 110.0,
+    DrawText(text1, (startMenuBtn1.x + startMenuBtn1.width / 2.) - (MeasureText(text1, size1) / 2.0), startMenuBtn1.y + 110.0,
         size1, red);
-    DrawText(text2, (menuBtn2.x + menuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0), menuBtn2.y + 110.0,
+    DrawText(text2, (startMenuBtn2.x + startMenuBtn2.width / 2.) - (MeasureText(text2, size2) / 2.0), startMenuBtn2.y + 110.0,
         size2, red);
 }
