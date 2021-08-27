@@ -15,8 +15,13 @@ Minesweeper::Minesweeper(int rows, int columns, int mineCount)
     this->columns = columns;
     this->mineCount = mineCount;
 
-    for (int _j { 0 }; _j < this->columns; _j++)
-        grid.push_back(std::vector<Cell>(this->rows));
+    for (int j { 0 }; j < this->columns; j++) {
+        std::vector<Cell> temp(this->rows);
+        for (int k { 0 }; k < this->rows; k++) {
+            temp[k].pos = CellVec { j, k };
+        }
+        grid.push_back(temp);
+    }
     mineCountStr = std::to_string(mineCount);
 }
 
@@ -44,12 +49,7 @@ int Minesweeper::countMines(std::vector<Vector2>& adjc)
     return mc;
 }
 
-void Minesweeper::reveal(int x, int y,
-    RenderTexture2D& gridTex,
-    Rectangle& cellPos,
-    int& cellSize,
-    const std::vector<const char*>& numbers,
-    const std::vector<Color>& colArr)
+void Minesweeper::reveal(int x, int y)
 {
     Cell& cell = grid[x][y];
     if (!cell.revealed && cell.value != -1) {
@@ -57,27 +57,16 @@ void Minesweeper::reveal(int x, int y,
         cell.value = countMines(adjc);
         cell.revealed = true;
         if (cell.flagged) {
-            int flagC[2] = { x, y };
             cell.flagged = false;
             flagCount--;
-            flagCoords.erase(flagC);
+            flagCoords.erase(CellVec { x, y });
         }
         revealedCells++;
+        needsUpdate.push_back(&cell);
 
-        BeginTextureMode(gridTex);
-        {
-            DrawRectangleRounded(cellPos, 0.1, 0, colArr[cell.value]);
-            if (cell.value > 0) {
-                const char* text = numbers[cell.value - 1];
-                float size = cellSize / 2.0;
-                DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
-                    size, bgCol);
-            }
-        }
-        EndTextureMode();
         if (cell.value == 0) {
             for (Vector2& adPos : adjc)
-                this->reveal(adPos.x, adPos.y, gridTex, cellPos, cellSize, numbers, colArr);
+                this->reveal(adPos.x, adPos.y);
         }
     }
 }
@@ -108,7 +97,9 @@ void Minesweeper::clear()
     started = false;
     flagCount = 0;
 
+    flagCoords.clear();
     grid.clear();
+    needsUpdate.clear();
 }
 
 std::string Minesweeper::flagCountDisplay()
