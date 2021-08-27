@@ -43,7 +43,7 @@ public:
     State state = State::Playing;
     TimeDisplay timeElapsed = TimeDisplay { 0, 0 };
 
-    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
+    const std::vector<Color> colArr = { Color { 106, 116, 136, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
     const std::vector<const char*> numbers = { "1", "2", "3", "4", "5", "6", "7", "8" };
     bool textureMade = false; // for storing whether game over texture is made
 
