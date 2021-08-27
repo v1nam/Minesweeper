@@ -14,33 +14,39 @@ void Display::drawMenu()
     Color btcol1 = black;
     Color btcol2 = black;
 
-    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, startMenuBtn1)) {
+    bool hov1 = CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, startMenuBtn1);
+    bool hov2 = CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, startMenuBtn2);
+
+    bool mousePressed = IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
+    if (hov1) {
         btcol1 = gray;
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        if (mousePressed) {
             screenWidth = 404;
             screenHeight = 404;
             mnsp = Minesweeper(8, 8, 10);
-            cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
-            screenWidth += 150;
-            SetWindowSize(screenWidth, screenHeight);
-            menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
-            pauseBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 130, 100.0, 50.0 };
-            state = State::Playing;
         }
-    }
-    if (CheckCollisionPointRec(Vector2 { mouseHoverX, mouseHoverY }, startMenuBtn2)) {
+    } else if (hov2) {
         btcol2 = gray;
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        if (mousePressed) {
             screenWidth = 548;
             screenHeight = 548;
             mnsp = Minesweeper(16, 16, 40);
-            cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
-            screenWidth += 150;
-            SetWindowSize(screenWidth, screenHeight);
-            menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
-            pauseBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 130, 100.0, 50.0 };
-            state = State::Playing;
         }
+    }
+    if ((hov1 || hov2) && mousePressed) {
+        cellSize = (screenWidth - pad * (mnsp.columns + 1)) / mnsp.columns;
+        BeginTextureMode(gamePlayTexture);
+        ClearBackground(bgCol);
+        for (int x { 0 }; x < mnsp.columns; x++) {
+            for (int y { 0 }; y < mnsp.rows; y++)
+                DrawRectangleRounded(indexToPos(x, y), 0.1, 0, mnsp.grid[x][y].color);
+        }
+        EndTextureMode();
+        screenWidth += 150;
+        SetWindowSize(screenWidth, screenHeight);
+        menuBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 65, 100.0, 50.0 };
+        pauseBtn = Rectangle { (float)screenWidth - 125, (float)screenHeight - 130, 100.0, 50.0 };
+        state = State::Playing;
     }
 
     DrawRectangleRounded(startMenuBtn1, 0.3, 0, btcol1);

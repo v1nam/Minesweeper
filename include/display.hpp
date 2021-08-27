@@ -24,8 +24,7 @@ struct TimeDisplay {
 class Display {
 private:
     const char* pauseText = "PAUSED";
-    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
-    char const* numbers[8] = { "1", "2", "3", "4", "5", "6", "7", "8" };
+    std::function<void()> boundReset;
 
 public:
     int screenWidth;
@@ -44,8 +43,11 @@ public:
     State state = State::Playing;
     TimeDisplay timeElapsed = TimeDisplay { 0, 0 };
 
+    const std::vector<Color> colArr = { Color { 96, 106, 126, 255 }, lblue, yellow, orange, red, teal, aqua, green, blue };
+    const std::vector<const char*> numbers = { "1", "2", "3", "4", "5", "6", "7", "8" };
     bool textureMade = false; // for storing whether game over texture is made
     RenderTexture2D gameOverTexture;
+    RenderTexture2D gamePlayTexture;
     Texture2D boom = LoadTexture("assets/boom.png");
     Texture2D flag = LoadTexture("assets/flag.png");
     Texture2D clock = LoadTexture("assets/clock.png");
@@ -61,4 +63,5 @@ public:
     void drawClockFlag();
     void drawSideBtn(const char* text, std::function<void()>, Rectangle& dims);
     void reset();
+    Rectangle indexToPos(int x, int y);
 };

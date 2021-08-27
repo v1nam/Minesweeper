@@ -26,13 +26,15 @@ int main()
             display.reset();
         EndDrawing();
     }
-    UnloadTexture(display.gameOverTexture.texture);
+    UnloadImage(icon);
     UnloadTexture(display.boom);
     UnloadTexture(display.flag);
     UnloadTexture(display.disflag);
     UnloadTexture(display.clock);
-    UnloadImage(icon);
+    UnloadTexture(display.gameOverTexture.texture);
+    UnloadTexture(display.gamePlayTexture.texture);
     UnloadRenderTexture(display.gameOverTexture);
+    UnloadRenderTexture(display.gamePlayTexture);
     CloseWindow();
     return 0;
 }

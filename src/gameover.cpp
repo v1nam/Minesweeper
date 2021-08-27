@@ -58,7 +58,7 @@ void Display::drawGameOver()
         DrawText(mnsp.endText, (screenWidth - 150) + (75 - MeasureText(mnsp.endText, 30) / 2.), screenHeight / 2. + 70,
             30, mnsp.won ? green : red);
         Rectangle& btnRef = menuBtn;
-        drawSideBtn("Menu", std::bind(&Display::reset, this), btnRef);
+        drawSideBtn("Menu", boundReset, btnRef);
         drawClockFlag();
     }
 }

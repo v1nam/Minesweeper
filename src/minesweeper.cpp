@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "colors.hpp"
+#include "display.hpp"
 #include "minesweeper.hpp"
 #include "raylib.h"
 
@@ -42,7 +44,12 @@ int Minesweeper::countMines(std::vector<Vector2>& adjc)
     return mc;
 }
 
-void Minesweeper::reveal(int x, int y)
+void Minesweeper::reveal(int x, int y,
+    RenderTexture2D& gridTex,
+    Rectangle& cellPos,
+    int& cellSize,
+    const std::vector<const char*>& numbers,
+    const std::vector<Color>& colArr)
 {
     Cell& cell = grid[x][y];
     if (!cell.revealed && cell.value != -1) {
@@ -50,13 +57,27 @@ void Minesweeper::reveal(int x, int y)
         cell.value = countMines(adjc);
         cell.revealed = true;
         if (cell.flagged) {
+            int flagC[2] = { x, y };
             cell.flagged = false;
             flagCount--;
+            flagCoords.erase(flagC);
         }
         revealedCells++;
+
+        BeginTextureMode(gridTex);
+        {
+            DrawRectangleRounded(cellPos, 0.1, 0, colArr[cell.value]);
+            if (cell.value > 0) {
+                const char* text = numbers[cell.value - 1];
+                float size = cellSize / 2.0;
+                DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
+                    size, bgCol);
+            }
+        }
+        EndTextureMode();
         if (cell.value == 0) {
             for (Vector2& adPos : adjc)
-                this->reveal(adPos.x, adPos.y);
+                this->reveal(adPos.x, adPos.y, gridTex, cellPos, cellSize, numbers, colArr);
         }
     }
 }
@@ -76,8 +97,6 @@ void Minesweeper::initGame(int x, int y)
         else
             i--;
     }
-    this->reveal(x, y);
-    started = true;
 }
 
 void Minesweeper::clear()

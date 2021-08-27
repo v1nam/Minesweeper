@@ -5,7 +5,6 @@
 #include "colors.hpp"
 #include "display.hpp"
 #include "raylib.h"
-#include <random>
 
 Display::Display(int pad, int screenWidth, int screenHeight)
 {
@@ -16,6 +15,9 @@ Display::Display(int pad, int screenWidth, int screenHeight)
     startMenuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     startMenuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     gameOverTexture = LoadRenderTexture(548, 548);
+    gamePlayTexture = LoadRenderTexture(548, 548);
+
+    boundReset = std::bind(&Display::reset, this);
 }
 
 void Display::draw()
@@ -47,7 +49,7 @@ void Display::draw()
         Rectangle& mbtnRef = menuBtn;
         Rectangle& pbtnRef = pauseBtn;
 
-        drawSideBtn("Menu", std::bind(&Display::reset, this), mbtnRef);
+        drawSideBtn("Menu", boundReset, mbtnRef);
         drawSideBtn(
             "Resume", [this]() {
                 this->state = State::Playing;
@@ -100,6 +102,12 @@ void Display::drawSideBtn(const char* text, std::function<void()> action, Rectan
     DrawRectangleRoundedLines(dims, 0.2, 0, 3.0, black);
     DrawText(text, dims.x + (dims.width / 2.0 - MeasureText(text, 20) / 2.0), dims.y + 15.0, 20,
         aqua);
+}
+
+Rectangle Display::indexToPos(int x, int y)
+{
+    return Rectangle { (float)pad + x * (cellSize + pad), (float)pad + y * (cellSize + (float)pad),
+        (float)cellSize, (float)cellSize };
 }
 
 std::string TimeDisplay::getTimeDisplay()
