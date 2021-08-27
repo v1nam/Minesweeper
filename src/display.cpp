@@ -14,7 +14,7 @@ Display::Display(int pad, int screenWidth, int screenHeight)
 
     startMenuBtn1 = Rectangle { 74.f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
     startMenuBtn2 = Rectangle { 294.0f, screenHeight / 2.0f - 90, 180.0f, 180.0f };
-    gameOverTexture = LoadRenderTexture(548, 548);
+
     gamePlayTexture = LoadRenderTexture(548, 548);
 
     boundReset = std::bind(&Display::reset, this);
