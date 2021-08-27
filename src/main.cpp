@@ -31,9 +31,7 @@ int main()
     UnloadTexture(display.flag);
     UnloadTexture(display.disflag);
     UnloadTexture(display.clock);
-    UnloadTexture(display.gameOverTexture.texture);
     UnloadTexture(display.gamePlayTexture.texture);
-    UnloadRenderTexture(display.gameOverTexture);
     UnloadRenderTexture(display.gamePlayTexture);
     CloseWindow();
     return 0;
