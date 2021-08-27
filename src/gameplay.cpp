@@ -33,12 +33,12 @@ void Display::drawGame()
     Rectangle cellRect = indexToPos(cellHoverX, cellHoverY);
     if (cellHoverX < mnsp.columns && cellHoverY < mnsp.rows) {
         Cell& hoverCell = mnsp.grid[cellHoverX][cellHoverY];
-        int flagC[2] = { cellHoverX, cellHoverY };
+        CellVec flagC = CellVec { cellHoverX, cellHoverY };
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             if (!mnsp.started) {
                 mnsp.initGame(cellHoverX, cellHoverY);
-                mnsp.reveal(cellHoverX, cellHoverY, gamePlayTexture, cellRect, cellSize, numbers, colArr);
+                mnsp.reveal(cellHoverX, cellHoverY);
                 mnsp.started = true;
             } else if (hoverCell.value == -1) {
                 mnsp.won = false;
@@ -46,10 +46,11 @@ void Display::drawGame()
                 if (hoverCell.flagged) {
                     hoverCell.flagged = false;
                     mnsp.flagCount--;
+                    mnsp.flagCoords.erase(flagC);
                 }
                 state = State::GameOver;
             } else
-                mnsp.reveal(cellHoverX, cellHoverY, gamePlayTexture, cellRect, cellSize, numbers, colArr);
+                mnsp.reveal(cellHoverX, cellHoverY);
         } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
             if (!hoverCell.revealed && mnsp.started) {
                 if (hoverCell.flagged) {
@@ -63,10 +64,28 @@ void Display::drawGame()
                 }
             }
         }
-        DrawRectangleRounded(cellRect, 0.1, 0, hlt);
+        if (!hoverCell.revealed)
+            DrawRectangleRounded(cellRect, 0.1, 0, hlt);
     }
-    for (int* flagCoord : mnsp.flagCoords) {
-        Rectangle cellPos = indexToPos(flagCoord[0], flagCoord[1]);
+    if (!mnsp.needsUpdate.empty()) {
+        for (Cell* cell : mnsp.needsUpdate) {
+            Rectangle cellPos = indexToPos((*cell).pos.x, (*cell).pos.y);
+            BeginTextureMode(gamePlayTexture);
+            {
+                DrawRectangleRounded(cellPos, 0.1, 0, colArr[(*cell).value]);
+                if ((*cell).value > 0) {
+                    const char* text = numbers[(*cell).value - 1];
+                    float size = cellSize / 2.0;
+                    DrawText(text, (cellPos.x + cellSize / 2) - (MeasureText(text, size) / 2), cellPos.y + cellSize / 4,
+                        size, bgCol);
+                }
+            }
+            EndTextureMode();
+        }
+        mnsp.needsUpdate.clear();
+    }
+    for (const CellVec& flagCoord : mnsp.flagCoords) {
+        Rectangle cellPos = indexToPos(flagCoord.x, flagCoord.y);
         float scale = ((float)cellSize / 3.f) / ((float)flag.width / 2.f);
         DrawTextureEx(
             flag,
