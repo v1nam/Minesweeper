@@ -49,7 +49,7 @@ void Display::drawGame()
                     mnsp.flagCoords.erase(flagC);
                 }
                 state = State::GameOver;
-            } else
+            } else if (!hoverCell.flagged)
                 mnsp.reveal(cellHoverX, cellHoverY);
         } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
             if (!hoverCell.revealed && mnsp.started) {
