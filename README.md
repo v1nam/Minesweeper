@@ -1,5 +1,5 @@
 ## Minesweeper
-Basic minesweeper clone made with [Raylib](https://github.com/raysan5/raylib).
+Basic minesweeper game made with [Raylib](https://github.com/raysan5/raylib).
 
 #
 
